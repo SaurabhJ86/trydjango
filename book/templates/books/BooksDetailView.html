@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<h3 align="center">{{ object.title }} </h3>
+<p>Author: <b>{{ object.author }}</b></p>
+<p>Pages: {{ object.pages}} , Price: {{ object.price }}</p>
+<p>Rating: {{ object.ratings }} </p>
+Created on: {{ object.timestamp }}, Updated {{ object.updated|timesince }} ago.
+
+{% endblock %}

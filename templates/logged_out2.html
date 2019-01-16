@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3>You have successfully {{ title }}.</h3>
+
+<p>To login in please click on this <a href="{% url 'login' %}">button</a></p>
+
+{% endblock %}

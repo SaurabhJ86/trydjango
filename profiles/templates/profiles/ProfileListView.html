@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+	<h4 align="center"> Logged In User: {{ request.user|capfirst }}</h4>
+
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<h3>All Users</h3>
+				{% for obj in object_list %}
+					
+					<ul>
+						<li><a href="{{ obj.get_absolute_url }}">{{ obj|capfirst }}</a></li>
+					</ul>
+
+				{% endfor %}
+			</div>
+			<div class="col-sm">
+				<h3>Followers </h3>
+				{% if followers %}
+
+					{% for users in followers %}
+
+						<ul>
+							<li><a href="{% url 'profiles:profile-detail' username=users.username %}">{{ users|capfirst }}</a></li>
+						</ul>
+
+					{% endfor %}
+
+				{% else %}
+
+					<p>None</p>
+
+				{% endif %}
+			</div>
+			<div class="col-sm">
+				<h3>Following</h3>
+				{% if is_following %}
+
+					{% for users in is_following %}
+
+						<ul>
+							<li><a href="{% url 'profiles:profile-detail' username=users.user.username %}">{{ users|capfirst }}</a></li>
+						</ul>
+
+					{% endfor %}
+
+				{% else %}
+
+					<p>Please select one of the users to follow</p>
+
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+{% else %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>All Users</h3>
+				{% for obj in object_list %}
+					
+					<ul>
+						<li><a href="{{ obj.get_absolute_url }}">{{ obj|capfirst }}</a></li>
+					</ul>
+
+				{% endfor %}				
+			</div>
+		</div>
+	</div>
+
+
+{% endif %}
+
+{% endblock %}
