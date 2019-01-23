@@ -18,3 +18,15 @@ class SignUpForm(UserCreationForm):
 			'password1',
 			'password2'
 		]
+
+
+class UpdateDetailsForm(forms.ModelForm):
+
+	class Meta:
+		model = User
+		fields = [
+			'first_name',
+			'last_name',
+			'email',
+		]
+		exclude = ['username','password1','password2']

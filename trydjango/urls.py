@@ -22,6 +22,7 @@ from pages.views import (
     about_view,
     my_account,
     register,
+    update_details,
     )
 from profiles.views import UserToggleView
 # from cart.views import cart_home
@@ -43,4 +44,5 @@ urlpatterns = [
     path('profile/',include('profiles.urls')),
     path('register/',register,name='register'),
     path('service/',include('service.urls')),
+    path('update/<int:id>/',update_details.as_view(),name='update_details'),
 ]

@@ -1,15 +1,19 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model,login,authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.http import HttpResponse,Http404
+from django.views.generic import UpdateView
+from django.shortcuts import render,redirect,get_object_or_404
+from django.urls import reverse
 
 # Create your views here.
 from profiles.models import Profile
-from .forms import SignUpForm
+from .forms import SignUpForm,UpdateDetailsForm
 
-User = settings.AUTH_USER_MODEL
+# User = settings.AUTH_USER_MODEL
 # Need to work on this.
 @login_required
 def home_view(request):
@@ -44,8 +48,22 @@ def my_account(request):
 	return render(request,"accounts.html",context)
 
 
+class update_details(LoginRequiredMixin,UpdateView):
+	template_name = 'update_details.html'
+	form_class = UpdateDetailsForm
+
+	def get_object(self):
+		id_ = self.kwargs.get("id")
+		obj = get_object_or_404(User,id=id_)
+		if self.request.user.id != obj.id:
+			raise Http404("No permission to update details page.")
+		return obj
+
+	def get_success_url(self):
+		return reverse('update_details',kwargs={"id":self.get_object().id})
+
+
 def register(request):
-	print("something")
 	if request.method == "POST":
 		form = SignUpForm(request.POST)
 		if form.is_valid():
