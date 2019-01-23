@@ -49,8 +49,15 @@ def my_account(request):
 
 	return render(request,"accounts.html",context)
 
+"""
+There are couple of things which I need to mention here. First of all, instead of using the form UserCreationForm,
+I am using the model "User" and its fields which in turn will work instead of the form_class,
 
+In the method get_success_url, I am using the self.get_object() method to pass in the id as the kwargs
+to the url "update_details."
+"""
 class update_details(LoginRequiredMixin,UpdateView):
+	# form_class = UserCreationForm
 	model = User
 	fields = ['first_name','last_name','email']
 	template_name = 'update_details.html'
