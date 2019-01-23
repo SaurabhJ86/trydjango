@@ -11,8 +11,10 @@ from django.urls import reverse
 
 # Create your views here.
 from profiles.models import Profile
-from .forms import SignUpForm,UpdateDetailsForm
+# The below relative import is when I created a new UpdateForm
+# from .forms import SignUpForm,UpdateDetailsForm
 
+from .forms import SignUpForm
 # User = settings.AUTH_USER_MODEL
 # Need to work on this.
 @login_required
@@ -49,8 +51,9 @@ def my_account(request):
 
 
 class update_details(LoginRequiredMixin,UpdateView):
+	model = User
+	fields = ['first_name','last_name','email']
 	template_name = 'update_details.html'
-	form_class = UpdateDetailsForm
 
 	def get_object(self):
 		id_ = self.kwargs.get("id")

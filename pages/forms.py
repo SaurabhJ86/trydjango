@@ -19,14 +19,16 @@ class SignUpForm(UserCreationForm):
 			'password2'
 		]
 
+"""
+Instead of creating the below form, I have imported the User model in the CBV update_details. Please check.
+"""
+# class UpdateDetailsForm(forms.ModelForm):
 
-class UpdateDetailsForm(forms.ModelForm):
-
-	class Meta:
-		model = User
-		fields = [
-			'first_name',
-			'last_name',
-			'email',
-		]
-		exclude = ['username','password1','password2']
+# 	class Meta:
+# 		model = User
+# 		fields = [
+# 			'first_name',
+# 			'last_name',
+# 			'email',
+# 		]
+# 		exclude = ['username','password1','password2']
