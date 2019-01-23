@@ -2,6 +2,21 @@
 
 
 {% block content %}
+<br>
+
+<div class="container" align="center">
+	<div class="row">
+		{% for choice in CHOICES %}
+			<div class="col-sm">
+				 	<form method="POST" action="{% url 'book:books-list' %}">{% csrf_token %}
+				 		<button type="submit" name="book_type" value="{{ choice.1 }}" class="btn btn-info" >{{ choice.1 }}</button>
+			 		</form>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+<br>
 
 {% if object_list %}
 
@@ -15,7 +30,7 @@
 
 {% else %}
 	
-	<h4>No books have been created by the you. To create a book, please click on the <a href="/book/create/">button.</a></h4>
+	<p>We do not have book(s) for this genre yet. Please check this page later.</p>
 
 {% endif %}
 {% endblock %}

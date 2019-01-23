@@ -28,13 +28,19 @@ class UserBooksDetailView(DetailView):
 	def get_context_data(self,**kwargs):
 		context = super().get_context_data(**kwargs)
 		is_following = False
+		is_owner = False
 		user = self.request.user
 		# Need to explain the below step for future.
 		get_owner = Profile.objects.get(user=self.get_object())
+
+		if self.request.user.id == get_owner.user.id:
+			is_owner = True
+
 		if user.is_authenticated:
 			if user in get_owner.followers.all():
 				is_following = True
 		context["is_following"] = is_following
+		context["is_owner"] = is_owner
 
 		return context
 

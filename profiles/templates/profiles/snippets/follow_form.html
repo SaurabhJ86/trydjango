@@ -1,8 +1,8 @@
-{% if request.user.is_authenticated %}
+{% if request.user.is_authenticated and not is_owner %}
 	<form class="form" method="POST" action="{% url 'follow' %}">{% csrf_token %}
 		<input type="hidden" name="username" value="{% if username %}{{username}}{% else %}saurabhjhingan{% endif %}">
 		<button class="btn {% if is_following %} btn-info {% else %} btn-primary {% endif %}">{% if is_following%} Unfollow {% else %} Follow {% endif %}</button>	
 	</form>
-{% else %}
+{% elif not request.user.is_authenticated %}
 	<p>Please <a href="{% url 'login' %}?next=/profile/{{ username }}/">Login</a> in to Follow this user.</p>
 {% endif %}

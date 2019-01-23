@@ -31,7 +31,9 @@
 </table>
 
 <input type="submit" value="login">
+<!-- <button class="btn btn-primary" type="submit" value="login">Login</button> -->
 <input type="hidden" name="next" value="{{ next }}">
 </form>
+<p>If not already registered, then please click <a href="{% url 'register' %}">here</a>.</p>
 
 {% endblock %}

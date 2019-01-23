@@ -17,12 +17,18 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import include,path
 
-from pages.views import home_view,about_view
+from pages.views import (
+    home_view,
+    about_view,
+    my_account,
+    register,
+    )
 from profiles.views import UserToggleView
 # from cart.views import cart_home
 urlpatterns = [
 	path('', home_view,name='home'),
 	path('about/',about_view,name='about'),
+    path('account/',my_account,name='account'),
     path('admin/', admin.site.urls),
 	path('blog/',include('Blog.urls')),
     path('book/',include('book.urls')),
@@ -35,5 +41,6 @@ urlpatterns = [
     # path('logout/',LogoutView.as_view(template_name='logged_out2.html'),name='logout'),    
     path('product/',include('products.urls')),
     path('profile/',include('profiles.urls')),
+    path('register/',register,name='register'),
     path('service/',include('service.urls')),
 ]

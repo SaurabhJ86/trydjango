@@ -2,12 +2,26 @@
 
 
 {% block content %}
-
-
 <h3 align="center">{{ object.title }} </h3>
-<p>Author: <b>{{ object.author }}</b></p>
-<p>Pages: {{ object.pages}} , Price: {{ object.price }}</p>
-<p>Rating: {{ object.ratings }} </p>
-Created on: {{ object.timestamp }}, Updated {{ object.updated|timesince }} ago.
+<div class="container">
+	<div class="row">
+		<div class="col-sm">
+			<p>Author: <b>{{ object.author }}</b></p>
+			<p>Pages: {{ object.pages}} , Price: {{ object.price }}</p>
+			<p>Rating: {{ object.ratings }} </p>
+			<p>Referred by <a href="{% url 'profiles:profile-detail' username=object.user %}">{{ object.user|capfirst }}</a></p>
+			Created on: {{ object.timestamp }}, Updated {{ object.updated|timesince }} ago.
+
+			<br>
+			<br>
+			{% if is_owner %}
+
+				<a href="{% url 'book:books-update' id=object.id %}">Update</a>
+
+			{% endif %}			
+		</div>
+	</div>
+</div>
+}
 
 {% endblock %}

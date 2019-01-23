@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse,Http404
-from django.shortcuts import redirect,render,get_object_or_404
+from django.http import HttpResponse,Http404,HttpResponseRedirect
+from django.shortcuts import redirect,render,get_object_or_404,redirect
 from django.urls import reverse_lazy,reverse
 # Create your views here.
 from .models import Book
@@ -13,6 +13,7 @@ from django.views.generic import (
 	DeleteView,
 	ListView,
 	UpdateView,
+	View,
 	)
 
 
@@ -48,14 +49,55 @@ class BooksDetailView(LoginRequiredMixin,DetailView):
 		id_ = self.kwargs.get("id")
 		return get_object_or_404(Book,id=id_)
 
+	"""
+	The below method will check whether the logged in user the owner or not, and if owner then an update button
+	will be available which will take the owner to update page where he/she can update the details of the book.	
+	"""
+	def get_context_data(self,**kwargs):
+		context = super().get_context_data(**kwargs)
+		id_ = self.kwargs.get("id")
+		obj = get_object_or_404(Book,id=id_)
+		is_owner = False
+
+		if self.request.user.id == obj.user.id:
+			context["is_owner"] = True
+
+		return context
+
 class BooksListView(ListView):
 
 	template_name = 'books/BooksListView.html'
-	queryset = Book.objects.all()
+
+	def get_queryset(self,*args,**kwargs):
+		filter_by = self.request.GET.get("filter_by")
+		books = Book.objects.all()
+		if filter_by is not None:
+			books = Book.objects.filter(book_type=filter_by.lower())
+		return books
+
+	"""
+	The below method will allow the redirect to the same page with a QueryString parameter
+	which in turn will be used by get_queryset method above.
+	"""
+	def post(self,request,*args,**kwargs):
+		filter_by = request.POST.get("book_type")
+		return redirect(f"/book/?filter_by={filter_by}")
+
+	"""
+	As of now this method is being used to pass in the Filter values.
+	"""
+	def get_context_data(self,**kwargs):
+		from .models import BOOK_CHOICES
+		context = super().get_context_data(**kwargs)
+		choices = BOOK_CHOICES
+
+		context["CHOICES"] = choices
+
+		return context
 
 class BooksListViewByUser(ListView):
 
-	template_name = 'books/BooksListView.html'
+	template_name = 'books/BooksMyListView.html'
 
 	def get_queryset(self):
 		queryset = Book.objects.filter(user=self.request.user)

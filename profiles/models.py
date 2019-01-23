@@ -22,11 +22,11 @@ class ProfileManager(models.Manager):
 		return profile,is_following
 
 class Profile(models.Model):
-	user = models.OneToOneField(User,on_delete=models.CASCADE)
-	followers = models.ManyToManyField(User,related_name='is_following',blank=True)
-	activated = models.BooleanField(default=False)
-	timestamp = models.DateTimeField(auto_now_add=True)
-	updated = models.DateTimeField(auto_now=True)
+	user 		= models.OneToOneField(User,on_delete=models.CASCADE)
+	followers 	= models.ManyToManyField(User,related_name='is_following',blank=True)
+	activated 	= models.BooleanField(default=False)
+	timestamp 	= models.DateTimeField(auto_now_add=True)
+	updated 	= models.DateTimeField(auto_now=True)
 
 
 	objects = ProfileManager()
@@ -42,6 +42,9 @@ class Profile(models.Model):
 def post_save_user_receiver(sender,instance,created,*args,**kwargs):
 	if created:
 		profile,is_created = Profile.objects.get_or_create(user=instance)
+		default_user_profile = Profile.objects.get(id=2)
+
+		default_user_profile.followers.add(instance)
 
 
 
