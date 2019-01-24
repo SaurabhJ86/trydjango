@@ -6,6 +6,17 @@
 
 <div class="container" align="center">
 	<div class="row">
+		{% for genre in GENRES %}
+			<div class="col-sm">
+				<form method="POST">{% csrf_token %}
+					<button class="btn btn-info" name="book_type" type="submit" value="{{ genre }}">{{ genre }} ({{ genre.num_book }})</button>
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+<!-- <div class="container" align="center">
+	<div class="row">
 		{% for choice in CHOICES %}
 			<div class="col-sm">
 				 	<form method="POST" action="{% url 'book:books-list' %}">{% csrf_token %}
@@ -14,7 +25,7 @@
 			</div>
 		{% endfor %}
 	</div>
-</div>
+</div> -->
 
 <br>
 

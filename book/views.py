@@ -73,7 +73,10 @@ class BooksListView(ListView):
 		filter_by = self.request.GET.get("filter_by")
 		books = Book.objects.all()
 		if filter_by is not None:
-			books = Book.objects.filter(book_type=filter_by.lower())
+			get_genre = Genre.objects.get(genre=filter_by)
+			# Instead of book_type now I will use genre.
+			# books = Book.objects.filter(book_type=filter_by.lower())
+			books = Book.objects.filter(genre=get_genre)
 		return books
 
 	"""
@@ -90,10 +93,12 @@ class BooksListView(ListView):
 	def get_context_data(self,**kwargs):
 		from .models import BOOK_CHOICES
 		context = super().get_context_data(**kwargs)
+		# The below will allow me to filter genre only if they have more than one book.
 		genre = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
 		choices = BOOK_CHOICES
 
-		context["GENRE"] = genre
+		# As above, using genre instead of book_type
+		context["GENRES"] = genre
 		context["CHOICES"] = choices
 
 		return context
