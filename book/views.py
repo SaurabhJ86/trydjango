@@ -1,10 +1,11 @@
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.shortcuts import redirect,render,get_object_or_404,redirect
 from django.urls import reverse_lazy,reverse
 # Create your views here.
-from .models import Book
+from .models import Book,Genre
 from .forms import BooksModelForm
 
 from django.views.generic import (
@@ -89,8 +90,10 @@ class BooksListView(ListView):
 	def get_context_data(self,**kwargs):
 		from .models import BOOK_CHOICES
 		context = super().get_context_data(**kwargs)
+		genre = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
 		choices = BOOK_CHOICES
 
+		context["GENRE"] = genre
 		context["CHOICES"] = choices
 
 		return context

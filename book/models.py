@@ -14,6 +14,14 @@ BOOK_CHOICES = [
 	('comic','COMIC'),
 	('science','SCIENCE'),
 ]
+class Genre(models.Model):
+	genre 		= models.CharField(max_length=50)
+	timestamp 	= models.DateTimeField(auto_now_add=True)
+	updated 	= models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.genre
+
 class Book(models.Model):
 	user 		= models.ForeignKey(User,on_delete=models.CASCADE)
 	title 		= models.CharField(max_length=120)
@@ -23,6 +31,7 @@ class Book(models.Model):
 	ratings 	= models.DecimalField(max_digits=5,decimal_places=2)
 	fictional 	= models.BooleanField(default=False)
 	book_type 	= models.CharField(max_length=100,choices=BOOK_CHOICES,default='history')
+	genre 		= models.ManyToManyField(Genre,related_name='under_genre',blank=True)
 	summary 	= models.TextField()
 	is_active 	= models.BooleanField(default=False)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
