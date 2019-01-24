@@ -2,22 +2,32 @@
 
 
 {% block content %}
-
-{% if object_list %}
-	
+{% if  Selected_Genre.count > 0  %}
 	<div class="container">
-		You can select any of the below topics for your feed.<br>
+		Your already selected genre(s).<br>
 		<br>
 		<div class="row">
-			{% for obj in object_list %}
+			{% for obj in Selected_Genre %}
 				<div class="col-sm">
 					<button class="btn btn-info">{{ obj }}</button>
 				</div>
 			{% endfor %}			
 		</div>
 	</div>
-	
-
 
 {% endif %}
+<br>
+	
+<div class="container">
+	You can select any of the below topics for your feed.<br>
+	<br>
+	<div class="row">
+		{% for obj in Unselected_Genre %}
+			<div class="col-sm">
+				<button class="btn btn-info">{{ obj }}</button>
+			</div>
+		{% endfor %}			
+	</div>
+</div>
+	
 {% endblock %}

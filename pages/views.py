@@ -103,6 +103,14 @@ class listGenre(LoginRequiredMixin,ListView):
 	template_name = "listGenre.html"
 	queryset = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
 
+	def get_context_data(self,**kwargs):
+		get_user_genres = Profile.objects.get(user=self.request.user).genre.all()
+		context = super().get_context_data(**kwargs)
+		new_qs = [g for g in Genre.objects.all() if g not in get_user_genres]
+
+		context["Unselected_Genre"] = new_qs
+		context["Selected_Genre"] = get_user_genres
+		return context
 
 
 
