@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 
 from django.urls import reverse
 
+from book.models import Genre
 User = settings.AUTH_USER_MODEL
 
 
@@ -27,6 +28,7 @@ class Profile(models.Model):
 	activated 	= models.BooleanField(default=False)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 	updated 	= models.DateTimeField(auto_now=True)
+	genre 		= models.ManyToManyField(Genre,related_name='follows_genre',blank=True)
 
 
 	objects = ProfileManager()

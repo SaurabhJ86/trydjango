@@ -73,9 +73,9 @@ class BooksListView(ListView):
 		filter_by = self.request.GET.get("filter_by")
 		books = Book.objects.all()
 		if filter_by is not None:
-			get_genre = Genre.objects.get(genre=filter_by)
-			# Instead of book_type now I will use genre.
-			# books = Book.objects.filter(book_type=filter_by.lower())
+			# For some reasson filter_by is getting capitalized in the url, therefore need to make the below changes.
+			get_genre = Genre.objects.get(genre=filter_by.capitalize())
+			# get_genre = Genre.objects.get(genre=filter_by)
 			books = Book.objects.filter(genre=get_genre)
 		return books
 

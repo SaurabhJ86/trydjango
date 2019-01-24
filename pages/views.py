@@ -4,18 +4,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Count
 from django.http import HttpResponse,Http404
-from django.views.generic import UpdateView
+from django.views.generic import (
+		UpdateView,
+		ListView,
+	)
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 
 # Create your views here.
+from book.models import Genre
 from profiles.models import Profile
-# The below relative import is when I created a new UpdateForm
-# from .forms import SignUpForm,UpdateDetailsForm
 
 from .forms import SignUpForm
-# User = settings.AUTH_USER_MODEL
+
 # Need to work on this.
 @login_required
 def home_view(request):
@@ -94,4 +97,13 @@ def register(request):
 	template_name = "Register.html"
 
 	return render(request,template_name,context)
+
+
+class listGenre(LoginRequiredMixin,ListView):
+	template_name = "listGenre.html"
+	queryset = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
+
+
+
+
 

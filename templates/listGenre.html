@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% if object_list %}
+	
+	<div class="container">
+		You can select any of the below topics for your feed.<br>
+		<br>
+		<div class="row">
+			{% for obj in object_list %}
+				<div class="col-sm">
+					<button class="btn btn-info">{{ obj }}</button>
+				</div>
+			{% endfor %}			
+		</div>
+	</div>
+	
+
+
+{% endif %}
+{% endblock %}
