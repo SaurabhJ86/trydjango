@@ -14,7 +14,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 
 # Create your views here.
-from book.models import Genre
+from book.models import Book,Genre
 from profiles.models import Profile
 
 from .forms import SignUpForm
@@ -22,11 +22,12 @@ from .forms import SignUpForm
 # Need to work on this.
 @login_required
 def home_view(request):
-
 	is_following = get_user_model().objects.get(username=request.user).is_following.all()
-
+	get_genre = Profile.objects.get(user=request.user).genre.all()
+	books = Book.objects.filter(genre__in=get_genre)
 	context = {
-		"is_following":is_following
+		"is_following":is_following,
+		"books":books,
 	}
 
 	return render(request,"home.html",context)
@@ -104,12 +105,13 @@ class listGenre(LoginRequiredMixin,ListView):
 	queryset = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
 
 	def get_context_data(self,**kwargs):
-		get_user_genres = Profile.objects.get(user=self.request.user).genre.all()
-		context = super().get_context_data(**kwargs)
-		new_qs = [g for g in Genre.objects.all() if g not in get_user_genres]
+		context 			= super().get_context_data(**kwargs)
+		get_user_genres 	= Profile.objects.get(user=self.request.user).genre.all()
+		unselected_genres 	= [g for g in Genre.objects.all() if g not in get_user_genres]
 
-		context["Unselected_Genre"] = new_qs
-		context["Selected_Genre"] = get_user_genres
+		context["Unselected_Genre"] = unselected_genres
+		context["Selected_Genre"] 	= get_user_genres
+
 		return context
 
 

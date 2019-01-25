@@ -2,14 +2,15 @@
 
 
 {% block content %}
+
 {% if  Selected_Genre.count > 0  %}
 	<div class="container">
-		Your already selected genre(s).<br>
+		Your already selected genre(s).Click them to remove it.<br>
 		<br>
 		<div class="row">
 			{% for obj in Selected_Genre %}
 				<div class="col-sm">
-					<button class="btn btn-info">{{ obj }}</button>
+					<button class="btn btn-info" id="remove_topic" value="{{ obj }}">{{ obj }}</button>
 				</div>
 			{% endfor %}			
 		</div>
