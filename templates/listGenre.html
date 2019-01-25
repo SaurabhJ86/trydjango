@@ -10,7 +10,10 @@
 		<div class="row">
 			{% for obj in Selected_Genre %}
 				<div class="col-sm">
-					<button class="btn btn-info" id="remove_topic" value="{{ obj }}">{{ obj }}</button>
+					<form method="POST" action=".">{% csrf_token %}
+						<input type="hidden" name="genre" value="{{ obj }}">
+						<button class="btn btn-info" type="submit">{{ obj }}</button>
+					</form>
 				</div>
 			{% endfor %}			
 		</div>
@@ -25,7 +28,10 @@
 	<div class="row">
 		{% for obj in Unselected_Genre %}
 			<div class="col-sm">
-				<button class="btn btn-info">{{ obj }}</button>
+				<form method="POST" action=".">{% csrf_token %}
+					<input type="hidden" name="genre" value="{{ obj }}">
+					<button class="btn btn-info" type="submit">{{ obj }}</button>	
+				</form>
 			</div>
 		{% endfor %}			
 	</div>

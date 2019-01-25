@@ -36,7 +36,7 @@ urlpatterns = [
     path('book/',include('book.urls')),
 	path('books/',include('books.urls')),
     path('cart/',include('cart.urls')),
-    path('genre/',listGenre.as_view(),name='list_genre'),
+    path('genre/',listGenre,name='list_genre'),
     path('login/',LoginView.as_view(),name='login'),
     path('logout/',LogoutView.as_view(),name='logout'),
     path('profile-follow/',UserToggleView.as_view(),name='follow'),

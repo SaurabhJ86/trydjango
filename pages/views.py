@@ -22,24 +22,29 @@ from .forms import SignUpForm
 # Need to work on this.
 @login_required
 def home_view(request):
-	is_following = get_user_model().objects.get(username=request.user).is_following.all()
 
 	followed_books = []
 	genre_books = []
 
+	"""
+	The below will allow me to get the books based upon the users the request.user is following
+	"""
+	is_following = get_user_model().objects.get(username=request.user).is_following.all()
 	if is_following:
 		for user in is_following:
 			for book in user.user.book_set.all():
 				followed_books.append(book)
 
+	"""
+	The below will allow me to get the books based upon the genres selected by the user
+	"""
 	get_genre = Profile.objects.get(user=request.user).genre.all()
 	if get_genre:
 		genre_books = Book.objects.filter(genre__in=get_genre)
+
+	# Using the data from above, I can merge them here and show only the unique books.
 	books = list(set(followed_books + list(genre_books)))
 
-	# books = Book.objects.filter(genre__in=get_genre)
-	# new_books = list(books)
-	# final_list = list(set(followed_books + new_books))
 	context = {
 		"is_following":is_following,
 		"books":books,
@@ -115,20 +120,25 @@ def register(request):
 	return render(request,template_name,context)
 
 
-class listGenre(LoginRequiredMixin,ListView):
+def listGenre(request):
 	template_name = "listGenre.html"
-	queryset = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
+	if request.method == "POST":
+		genre = request.POST.get("genre")
+		get_genre = Genre.objects.get(genre=genre)
+		profile = Profile.objects.get(user=request.user)
+		genre_update = Profile.objects.toggle_genre(request.user,get_genre)
+		# print(profile)
+		# profile.genre.add(get_genre)
+		# Profile.objects.get(user=request.user).add(get_genre)
 
-	def get_context_data(self,**kwargs):
-		context 			= super().get_context_data(**kwargs)
-		get_user_genres 	= Profile.objects.get(user=self.request.user).genre.all()
-		unselected_genres 	= [g for g in Genre.objects.all() if g not in get_user_genres]
+	get_user_genres 	= Profile.objects.get(user=request.user).genre.all()
+	unselected_genres 	= [g for g in Genre.objects.all() if g not in get_user_genres]
 
-		context["Unselected_Genre"] = unselected_genres
-		context["Selected_Genre"] 	= get_user_genres
+	context = {
+		"Unselected_Genre":unselected_genres,
+		"Selected_Genre":get_user_genres,
+	}
 
-		return context
-
-
+	return render(request,template_name,context)
 
 

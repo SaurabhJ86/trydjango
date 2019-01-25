@@ -22,6 +22,15 @@ class ProfileManager(models.Manager):
 			is_following = True
 		return profile,is_following
 
+	def toggle_genre(self,user,genre):
+		profile = Profile.objects.get(user=user)
+		genre = Genre.objects.get(genre=genre)
+		if genre in profile.genre.all():
+			profile.genre.remove(genre)
+		else:
+			profile.genre.add(genre)
+		return genre
+
 class Profile(models.Model):
 	user 		= models.OneToOneField(User,on_delete=models.CASCADE)
 	followers 	= models.ManyToManyField(User,related_name='is_following',blank=True)
