@@ -2,7 +2,9 @@
 
 
 {% block content %}
-	<h3 align="center">Your Feed: {{ request.user|capfirst }}</h3>
+
+
+<!-- 	<h3 align="center">Your Feed: {{ request.user|capfirst }}</h3>
 	{% if is_following %}
 		{% for users in is_following %}
 			{% if users.user.book_set.all %}
@@ -22,5 +24,25 @@
 				{% endfor %}
 			{% endif %}
 		{% endfor %}
+	{% endif %} -->
+
+	<h3 align="center">Your Feed: {{ request.user|capfirst }}</h3>
+	{% if books %}
+		{% for book in books %}
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card">
+							<ul>
+								<li><a href="{% url 'book:books-details' id=book.id %}">{{ book }}</a> by Author {{ book.author }} 
+								<br> Referenced by user <a href="{% url 'profiles:profile-detail' username=book.user %}">{{ book.user|capfirst }}</a> </li>
+							</ul>
+						</div>
+						<br>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 	{% endif %}
+
 {% endblock %}

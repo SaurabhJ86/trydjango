@@ -23,8 +23,23 @@ from .forms import SignUpForm
 @login_required
 def home_view(request):
 	is_following = get_user_model().objects.get(username=request.user).is_following.all()
+
+	followed_books = []
+	genre_books = []
+
+	if is_following:
+		for user in is_following:
+			for book in user.user.book_set.all():
+				followed_books.append(book)
+
 	get_genre = Profile.objects.get(user=request.user).genre.all()
-	books = Book.objects.filter(genre__in=get_genre)
+	if get_genre:
+		genre_books = Book.objects.filter(genre__in=get_genre)
+	books = list(set(followed_books + list(genre_books)))
+
+	# books = Book.objects.filter(genre__in=get_genre)
+	# new_books = list(books)
+	# final_list = list(set(followed_books + new_books))
 	context = {
 		"is_following":is_following,
 		"books":books,
