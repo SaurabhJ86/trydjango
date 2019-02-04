@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm">
+			<h3 align="center">{{ object.author }}</h3>
+			{% if object.about %}
+				<div class="card">
+					<div class="card-body">
+						<h4 class="card-title" align="center">About:</h4>
+						{{ object.about }}
+					</div>
+				</div>
+			{% endif %}
+			<br>
+			{% if object.genre.all %}
+				<h4>Author {{ objects.author}} deals in genre(s):</h4>
+				{% for genre in object.genre.all %}
+					<p>{{ genre }}</p>
+				{% endfor %}
+			{% endif %}
+			{% if object.book_set.all %}
+				<h4>Book(s) by Author</h4>
+				{% for book in object.book_set.all %}
+					<!-- The below is handful because the "book" is now a Book Model instance instead of Author Model since we are using the FK relationship between Book and Author and therefore I can use the Book method "get_absolute_url"  -->
+					<a href="{{ book.get_absolute_url }}">{{ book }}</a><br>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

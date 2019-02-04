@@ -22,10 +22,24 @@ class Genre(models.Model):
 	def __str__(self):
 		return self.genre
 
+class Author(models.Model):
+	author 		= models.CharField(max_length=120)
+	timestamp 	= models.DateTimeField(auto_now_add=True)
+	updated 	= models.DateTimeField(auto_now=True)
+	about 		= models.TextField()
+	genre 		= models.ManyToManyField(Genre,related_name='author_genre',blank=True)
+
+	def __str__(self):
+		return self.author
+
+	def get_absolute_url(self,**kwargs):
+		return reverse("author_details",kwargs={"id":self.id})
+
 class Book(models.Model):
 	user 		= models.ForeignKey(User,on_delete=models.CASCADE)
 	title 		= models.CharField(max_length=120)
 	author 		= models.CharField(max_length=120)
+	author_new 	= models.ForeignKey(Author,on_delete=models.CASCADE,null=True,blank=True)
 	pages 		= models.IntegerField(default=200)
 	price 		= models.DecimalField(max_digits=5,decimal_places=2)
 	ratings 	= models.DecimalField(max_digits=5,decimal_places=2)

@@ -18,9 +18,11 @@ from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import include,path
 
 from pages.views import (
+    AuthorDetails,
     home_view,
     about_view,
     my_account,
+    listAuthor,
     listGenre,
     register,
     update_details,
@@ -37,6 +39,8 @@ urlpatterns = [
 	path('books/',include('books.urls')),
     path('cart/',include('cart.urls')),
     path('genre/',listGenre,name='list_genre'),
+    path('authors/',listAuthor.as_view(),name='list_authors'),
+    path('author/<int:id>/',AuthorDetails.as_view(),name='author_details'),
     path('login/',LoginView.as_view(),name='login'),
     path('logout/',LogoutView.as_view(),name='logout'),
     path('profile-follow/',UserToggleView.as_view(),name='follow'),

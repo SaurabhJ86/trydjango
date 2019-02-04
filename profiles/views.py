@@ -32,6 +32,24 @@ class UserBooksDetailView(DetailView):
 		user = self.request.user
 		# Need to explain the below step for future.
 		get_owner = Profile.objects.get(user=self.get_object())
+		get_owner_followers = get_owner.followers.all()
+		get_user_is_following = user.is_following.all()
+
+		# print(get_owner.followers.values("username"))
+		# print(user.is_following.values("username"))
+		common_users = []
+		print((get_owner_followers))
+		for user in get_owner_followers:
+			if Profile.objects.get(user=user) in get_user_is_following:
+				common_users.append(user)
+		print(get_user_is_following)
+		# print(get_owner.followers.all())
+		# print(user.is_following.all())
+		# print(Profile.objects.get(user=user).followers.all())
+		# common_users = list(set(list(get_owner.followers.all()) + list(user.is_following.all())))
+		# common_users = list(set(list(get_owner.followers.all()).intersection(list(user.is_following.all()))))
+		# common_users = list(set(get_user_is_following).intersection(get_owner_followers))
+		print(common_users)
 
 		if self.request.user.id == get_owner.user.id:
 			is_owner = True
@@ -41,6 +59,7 @@ class UserBooksDetailView(DetailView):
 				is_following = True
 		context["is_following"] = is_following
 		context["is_owner"] = is_owner
+		context["common_users"] = common_users
 
 		return context
 

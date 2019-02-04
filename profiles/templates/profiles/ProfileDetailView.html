@@ -5,24 +5,35 @@
 
 <h4 align="center">Owner: {{ object.username|capfirst}}</h4>
 
-{% include 'profiles/snippets/follow_form.html' with username=object.username is_following=is_following is_owner=is_owner%}
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			{% include 'profiles/snippets/follow_form.html' with username=object.username is_following=is_following is_owner=is_owner%}
 
-<br>
+			<br>
 
-{% if object.book_set.all %}
+			{% if object.book_set.all %}
 
-	{% for obj in object.book_set.all %}
+				{% for obj in object.book_set.all %}
 
-		<ul>
-			<li><a href="{{ obj.get_absolute_url}}">{{ obj.title }}</a></li>
-		</ul>
+					<ul>
+						<li><a href="{{ obj.get_absolute_url}}">{{ obj.title }}</a></li>
+					</ul>
 
-	{% endfor %}
+				{% endfor %}
 
-{% else %}
+			{% else %}
 
-	<p>No book has been suggested by the user.</p>
+				<p>No book has been suggested by the user.</p>
 
-{% endif %}
+			{% endif %}
+			{% if common_users %}
+				Followed By: {% for user in common_users %} {{ user|capfirst }}, {% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+
 
 {% endblock %}

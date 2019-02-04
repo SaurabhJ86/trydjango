@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # third party
     'crispy_forms',
+    'storages',
 
     # own
     'Blog',
@@ -136,3 +137,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DEFAULT_FILE_STORAGE = 'trydjango.utils.MediaRootS3BotoStorage'
+STATICFILES_STORAGE = 'trydjango.utils.StaticRootS3BotoStorage'
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = 'trydjangochd'
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+

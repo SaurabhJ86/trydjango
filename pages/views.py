@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Count
 from django.http import HttpResponse,Http404
 from django.views.generic import (
+		DetailView,
 		UpdateView,
 		ListView,
 	)
@@ -14,7 +15,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 
 # Create your views here.
-from book.models import Book,Genre
+from book.models import Book,Genre,Author
 from profiles.models import Profile
 
 from .forms import SignUpForm
@@ -25,6 +26,13 @@ def home_view(request):
 
 	followed_books = []
 	genre_books = []
+	other_user_dict = {}
+
+	"""
+	This is being done so that the logged in user is not shown in other_user_dict. Please check the 
+	if condition part of is_following_users where the below value would be used.
+	"""
+	user_id = Profile.objects.get(user=request.user).id
 
 	"""
 	The below will allow me to get the books based upon the users the request.user is following
@@ -32,6 +40,8 @@ def home_view(request):
 	is_following = get_user_model().objects.get(username=request.user).is_following.all()
 	if is_following:
 		for user in is_following:
+			other_user_dict[user] = get_user_model().objects.get(username=user).is_following.all()
+			# print(user,get_user_model().objects.get(username=user).is_following.all())
 			for book in user.user.book_set.all():
 				followed_books.append(book)
 
@@ -48,6 +58,8 @@ def home_view(request):
 	context = {
 		"is_following":is_following,
 		"books":books,
+		"others":other_user_dict,
+		"user_id":user_id,
 	}
 
 	return render(request,"home.html",context)
@@ -127,12 +139,12 @@ def listGenre(request):
 		get_genre = Genre.objects.get(genre=genre)
 		profile = Profile.objects.get(user=request.user)
 		genre_update = Profile.objects.toggle_genre(request.user,get_genre)
-		# print(profile)
-		# profile.genre.add(get_genre)
-		# Profile.objects.get(user=request.user).add(get_genre)
+
 
 	get_user_genres 	= Profile.objects.get(user=request.user).genre.all()
-	unselected_genres 	= [g for g in Genre.objects.all() if g not in get_user_genres]
+	# This will make sure that only those genres are shown which have books under them.
+	genre = Genre.objects.annotate(num_book=Count("under_genre")).filter(num_book__gt=0)
+	unselected_genres 	= [g for g in genre if g not in get_user_genres]
 
 	context = {
 		"Unselected_Genre":unselected_genres,
@@ -140,5 +152,19 @@ def listGenre(request):
 	}
 
 	return render(request,template_name,context)
+
+
+class listAuthor(ListView):
+	template_name = 'listAuthor.html'
+	queryset = Author.objects.all()
+
+
+class AuthorDetails(LoginRequiredMixin,DetailView):
+	template_name = 'authorDetail.html'
+
+	def get_object(self):
+		id_ = self.kwargs.get("id")
+		get_object = get_object_or_404(Author,id=id_)
+		return get_object
 
 
