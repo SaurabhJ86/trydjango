@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'trydjangoDB',
         'USER': 'trydjangouser',
-        'PASSWORD': 'Erica@2014',
+        'PASSWORD':os.environ.get("TryDjango_DB_PWD"),
     }
 }
 
