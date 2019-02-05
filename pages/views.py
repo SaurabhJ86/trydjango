@@ -40,6 +40,9 @@ def home_view(request):
 	is_following = get_user_model().objects.get(username=request.user).is_following.all()
 	if is_following:
 		for user in is_following:
+			print(other_user_dict.values())
+			print("----")
+			# if user not in other_user_dict.values():
 			other_user_dict[user] = get_user_model().objects.get(username=user).is_following.all()
 			for book in user.user.book_set.all():
 				followed_books.append(book)
@@ -47,15 +50,15 @@ def home_view(request):
 	"""
 	The below will allow me to get the books based upon the genres selected by the user
 	"""
-	# get_genre = Profile.objects.get(user=request.user).genre.all().order_by("-timestamp")
 	get_genre = Profile.objects.get(user=request.user).genre.all()
 	if get_genre:
 		genre_books = Book.objects.filter(genre__in=get_genre)
 
+	# for k,v in other_user_dict.items():
+		# print(k,v)
 	# Using the data from above, I can merge them here and show only the unique books.
 	books = list(set(followed_books + list(genre_books)))
-	for book in books:
-		print(type(book))
+
 	# The below will make sure that the books are returned by latest timestamp.
 	books.reverse()
 	context = {

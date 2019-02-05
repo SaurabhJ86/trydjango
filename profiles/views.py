@@ -37,10 +37,10 @@ class UserBooksDetailView(DetailView):
 
 		# This part is required so that we can show the Followed_By part in the profile page.
 		common_users = []
-		for user in get_owner_followers:
-			if Profile.objects.get(user=user) in get_user_is_following:
-				common_users.append(user)
 
+		for follower in get_owner_followers:
+			if Profile.objects.get(user=follower) in get_user_is_following:
+				common_users.append(follower)
 
 		if self.request.user.id == get_owner.user.id:
 			is_owner = True
@@ -48,6 +48,7 @@ class UserBooksDetailView(DetailView):
 		if user.is_authenticated:
 			if user in get_owner.followers.all():
 				is_following = True
+
 		context["is_following"] = is_following
 		context["is_owner"] = is_owner
 		context["common_users"] = common_users
