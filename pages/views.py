@@ -54,6 +54,8 @@ def home_view(request):
 
 	# Using the data from above, I can merge them here and show only the unique books.
 	books = list(set(followed_books + list(genre_books)))
+	for book in books:
+		print(type(book))
 	# The below will make sure that the books are returned by latest timestamp.
 	books.reverse()
 	context = {
