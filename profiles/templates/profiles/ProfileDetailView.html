@@ -17,7 +17,7 @@
 				{% for obj in object.book_set.all %}
 
 					<ul>
-						<li><a href="{{ obj.get_absolute_url}}">{{ obj.title }}</a></li>
+						<li><a href="{{ obj.get_absolute_url}}">{{ obj.title }}</a> Created on {{ obj.timestamp }}</li>
 					</ul>
 
 				{% endfor %}
