@@ -132,7 +132,7 @@ def register(request):
 
 	return render(request,template_name,context)
 
-
+@login_required
 def listGenre(request):
 	template_name = "listGenre.html"
 	if request.method == "POST":
