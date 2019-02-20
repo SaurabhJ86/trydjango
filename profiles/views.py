@@ -23,7 +23,6 @@ class UserBooksDetailView(DetailView):
 		user = self.kwargs.get("username")
 		obj = get_object_or_404(get_user_model(),username=user)
 		return obj
-		# queryset = Profile.objects.get()
 
 	def get_context_data(self,**kwargs):
 		context = super().get_context_data(**kwargs)

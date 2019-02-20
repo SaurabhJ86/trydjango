@@ -2,18 +2,37 @@
 
 
 {% block content %}
+
+<style type="text/css">
+	.btn-info
+	{
+		width: 120px;
+		margin: 2px;
+	}
+	.scrollmenu
+	{
+		overflow: hidden;
+		white-space: nowrap;
+		height: 50px;
+	}
+	.scrollmenu:hover
+	{
+		overflow: auto;
+	}
+</style>
 <br>
 
-<div class="container" align="center">
-	<div class="row">
-		{% for genre in GENRES %}
-			<div class="col-sm">
-				<form method="POST">{% csrf_token %}
+
+<div class="container">
+	<div class="scrollmenu" align="center">
+		<form class="form-inline" method="POST">{% csrf_token %}
+			<div class="form-group">
+				{% for genre in GENRES %}
 					<button class="btn btn-info" name="book_type" type="submit" value="{{ genre }}">{{ genre }} ({{ genre.num_book }})</button>
-				</form>
+				{% endfor %}							
 			</div>
-		{% endfor %}
-	</div>
+		</form>
+	</div>	
 </div>
 
 <br>

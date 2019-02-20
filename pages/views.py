@@ -27,6 +27,7 @@ def home_view(request):
 	followed_books = []
 	genre_books = []
 	other_user_dict = {}
+	other_user_list = []
 
 	"""
 	This is being done so that the logged in user is not shown in other_user_dict. Please check the 
@@ -34,14 +35,17 @@ def home_view(request):
 	"""
 	user_id = Profile.objects.get(user=request.user).id
 
+
 	"""
 	The below will allow me to get the books based upon the users the request.user is following
 	"""
 	is_following = get_user_model().objects.get(username=request.user).is_following.all()
 	if is_following:
 		for user in is_following:
-			print(other_user_dict.values())
-			print("----")
+			# other_user_list.append(get_user_model().objects.get(username=user).is_following.all())
+			# print(list(get_user_model().objects.get(username=user).is_following.all()))
+			# The below is get only unique names. This is for CR 53. Need to work on this later.
+			other_user_list = other_user_list + list(get_user_model().objects.get(username=user).is_following.all())
 			# if user not in other_user_dict.values():
 			other_user_dict[user] = get_user_model().objects.get(username=user).is_following.all()
 			for book in user.user.book_set.all():
@@ -54,12 +58,13 @@ def home_view(request):
 	if get_genre:
 		genre_books = Book.objects.filter(genre__in=get_genre)
 
-	# for k,v in other_user_dict.items():
-		# print(k,v)
+
 	# Using the data from above, I can merge them here and show only the unique books.
 	books = list(set(followed_books + list(genre_books)))
 
 	# The below will make sure that the books are returned by latest timestamp.
+	# print(list(set(other_user_list)))
+	# print(other_user_dict)
 	books.reverse()
 	context = {
 		"is_following":is_following,
