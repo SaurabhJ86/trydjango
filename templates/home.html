@@ -3,6 +3,19 @@
 
 {% block content %}
 
+<style>
+
+.scrollmenu
+{
+	overflow: auto;
+}
+.card-block
+{
+	overflow: auto;
+}
+	
+</style>
+
 	<h3 align="center">Your Feed: {{ request.user|capfirst }}</h3>
 	{% if books %}
 		{% for book in books %}
@@ -34,7 +47,7 @@
 						<!-- The below condition will make sure that the is_followers users are not repeated and logged in user 
 							is not shown as well.-->
 						{% if obj not in is_following and obj.id != user_id  %}
-							<div class="col-sm-3">
+							<div class="col-sm-3 offset-sm-2">
 								<div class="card card-block">
 									<div class="card-body">
 										<a href="{{ obj.get_absolute_url }}">{{ obj|capfirst }} </a><br>
@@ -46,6 +59,35 @@
 					{% endfor %}
 				{% endif %}
 			{% endfor %} 						
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="scrollmenu">
+			{% for user,is_following_users in others.items %}
+				{% if is_following_users %}
+					{% for obj in is_following_users %}
+						<!-- The below condition will make sure that the is_followers users are not repeated and logged in user 
+							is not shown as well.-->
+						{% if obj not in is_following and obj.id != user_id  %}
+							<!-- <div class="col-sm-3 offset-sm-2"> -->
+								<div class="card card-block" style="display: inline-block;">
+									<div class="card-body">
+										<a href="{{ obj.get_absolute_url }}">{{ obj|capfirst }} </a><br>
+										<p>Followed by {{ user|capfirst }}</p>												
+									</div>
+								</div>
+							<!-- </div> -->
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endfor %} 			
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="">
+			
 		</div>
 	</div>
 

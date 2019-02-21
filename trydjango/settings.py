@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # third party
     'crispy_forms',
     'storages',
+    'rest_framework',
 
     # own
     'Blog',

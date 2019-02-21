@@ -36,10 +36,10 @@ class Author(models.Model):
 		return reverse("author_details",kwargs={"id":self.id})
 
 class Book(models.Model):
-	user 		= models.ForeignKey(User,on_delete=models.CASCADE)
+	user 		= models.ForeignKey(User,related_name='user',on_delete=models.CASCADE)
 	title 		= models.CharField(max_length=120)
 	author 		= models.CharField(max_length=120)
-	author_new 	= models.ForeignKey(Author,on_delete=models.CASCADE,null=True,blank=True)
+	author_new 	= models.ForeignKey(Author,related_name='under_author',on_delete=models.CASCADE,null=True,blank=True)
 	pages 		= models.IntegerField(default=200)
 	price 		= models.DecimalField(max_digits=5,decimal_places=2)
 	ratings 	= models.DecimalField(max_digits=5,decimal_places=2)

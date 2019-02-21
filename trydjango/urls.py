@@ -34,6 +34,7 @@ urlpatterns = [
 	path('about/',about_view,name='about'),
     path('account/',my_account,name='account'),
     path('admin/', admin.site.urls),
+    path('api/books/',include('book.api.urls')),
 	path('blog/',include('Blog.urls')),
     path('book/',include('book.urls')),
 	path('books/',include('books.urls')),
